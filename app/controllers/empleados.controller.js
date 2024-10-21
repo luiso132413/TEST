@@ -1,5 +1,5 @@
 const db = require('../config/db.config.js');
-const Empleado = db.Empleado;
+const Empleados = db.Empleados;
 
 // Crear un nuevo empleado
 exports.create = (req, res) => {
@@ -14,7 +14,7 @@ exports.create = (req, res) => {
         empleado.estado = req.body.estado;
 
         // Guardar en la base de datos
-        Empleado.create(empleado).then(result => {
+        Empleados.create(empleado).then(result => {
             res.status(200).json({
                 message: "Empleado creado exitosamente con id = " + result.id_emp,
                 empleado: result,
