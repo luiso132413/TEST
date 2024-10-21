@@ -11,6 +11,7 @@ exports.create = (req, res) => {
         empleado.apellido = req.body.apellido;
         empleado.correo = req.body.correo;
         empleado.sueldo = req.body.sueldo;
+        empleado.rol = req.body.rol;
         empleado.estado = req.body.estado;
 
         // Guardar en la base de datos
