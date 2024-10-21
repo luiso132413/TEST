@@ -7,22 +7,22 @@ module.exports = (sequelize, Sequelize) => {
 			primaryKey: true
     },
 	fechaingreso: {
-		    type: Sequelize.STRING
+		    type: Sequelize.DATE
 	},
 	fechasalida: {
-		    type: Sequelize.STRING
+		    type: Sequelize.DATE
 	},
 	cuarto: {
 		    type: Sequelize.STRING
 	},
 	tipodeservicio: {
-		    type: Sequelize.DOUBLE
+		    type: Sequelize.STRING
 	},
 	tipodepago: {
 		type: Sequelize.STRING
 	},
 	pagototal: {
-		type: Sequelize.STRING
+		type: Sequelize.DOUBLE
 	}
 	});
 	
