@@ -3,31 +3,32 @@ const Servicio = db.Servicio;
 
 // Crear un nuevo servicio
 exports.create = (req, res) => {
-    let servicio = {};
+    const servicio = {
+        fechaingreso: req.body.fechaingreso,
+        fechasalida: req.body.fechasalida,
+        cuarto: req.body.cuarto,
+        tipodeservicio: req.body.tipodeservicio,
+        tipodepago: req.body.tipodepago,
+        pagototal: req.body.pagototal,
+    };
 
-    try {
-        // Construir el objeto Servicio a partir de la solicitud HTTP
-        servicio.fechaingreso = req.body.fechaingreso;
-        servicio.fechasalida = req.body.fechasalida;
-        servicio.cuarto = req.body.cuarto;
-        servicio.tipodeservicio = req.body.tipodeservicio;
-        servicio.tipodepago = req.body.tipodepago;
-        servicio.pagototal = req.body.pagototal;
-
-        // Guardar en la base de datos
-        Servicio.create(servicio).then(result => {
-            res.status(200).json({
+    // Guardar en la base de datos
+    Servicio.create(servicio)
+        .then(result => {
+            res.status(201).json({
                 message: "Servicio creado exitosamente con id = " + result.id_ser,
                 servicio: result,
             });
+        })
+        .catch(error => {
+            console.error(error); // Para más información sobre el error
+            res.status(500).json({
+                message: "¡Error al crear el servicio!",
+                error: error.message
+            });
         });
-    } catch (error) {
-        res.status(500).json({
-            message: "¡Error al crear el servicio!",
-            error: error.message
-        });
-    }
 };
+
 
 // Recuperar todos los servicios
 exports.retrieveAllServicios = (req, res) => {
