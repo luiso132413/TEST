@@ -18,6 +18,9 @@ module.exports = (sequelize, Sequelize) => {
 	sueldo: {
 		    type: Sequelize.DOUBLE
 	},
+	rol: {
+		type: Sequelize.STRING
+	},
 	estado: {
 		type: Sequelize.STRING
 	}
