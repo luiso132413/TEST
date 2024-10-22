@@ -20,18 +20,23 @@ module.exports = (sequelize, Sequelize) => {
 	  rol: {
 		    type: Sequelize.INTEGER,
 		    set(value) {
-			    if (value.toLowerCase() === 'admin') {
-				    this.setDataValue('rol', 1);
-			    } else if (value.toLowerCase() === 'empleado') {
-				    this.setDataValue('rol', 0);
-			    } else {
-				    throw new Error('Rol inválido, debe ser "admin" o "empleado"');
-			    }
+				if (typeof value === 'string') {
+				    const lowerValue = value.toLowerCase();
+				    if (lowerValue === 'admin') {
+					    this.setDataValue('rol', 1);
+				    } else if (lowerValue === 'empleado') {
+					    this.setDataValue('rol', 0);
+				    } else {
+					    throw new Error('Rol inválido, debe ser "admin" o "empleado"');
+				    }
+				} else {
+					throw new Error('El rol debe ser una cadena de texto');
+				}
 		    }
 	  },
 	  estado: {
 		    type: Sequelize.STRING,
-		    defaultValue: 'Activo' // Por si quieres que el estado sea 'Activo' por defecto
+		    defaultValue: 'Activo'
 	  }
 	});
 	
