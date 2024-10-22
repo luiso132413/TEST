@@ -11,8 +11,8 @@ exports.create = (req, res) => {
         empleado.apellido = req.body.apellido;
         empleado.correo = req.body.correo;
         empleado.sueldo = req.body.sueldo;
-        empleado.rol = req.body.rol;
-        empleado.estado = req.body.estado;
+        empleado.rol = req.body.rol; // 'admin' o 'empleado', será convertido a 1 o 0 según el modelo
+        empleado.estado = req.body.estado || 'Activo'; // Si no envían el estado, lo colocamos como 'Activo' por defecto
 
         // Guardar en la base de datos
         Empleados.create(empleado).then(result => {
@@ -23,7 +23,7 @@ exports.create = (req, res) => {
         });
     } catch (error) {
         res.status(500).json({
-            message: "¡Error!",
+            message: "¡Error al crear el empleado!",
             error: error.message
         });
     }
@@ -31,7 +31,7 @@ exports.create = (req, res) => {
 
 // Recuperar todos los empleados
 exports.retrieveAllEmpleados = (req, res) => {
-    Empleado.findAll()
+    Empleados.findAll()
         .then(empleados => {
             res.status(200).json({
                 message: "Empleados recuperados exitosamente.",
@@ -41,7 +41,7 @@ exports.retrieveAllEmpleados = (req, res) => {
         .catch(error => {
             console.log(error);
             res.status(500).json({
-                message: "¡Error!",
+                message: "¡Error al recuperar empleados!",
                 error: error.message
             });
         });
@@ -50,7 +50,7 @@ exports.retrieveAllEmpleados = (req, res) => {
 // Recuperar un empleado por ID
 exports.getEmpleadoById = (req, res) => {
     let empleadoId = req.params.id;
-    Empleado.findByPk(empleadoId)
+    Empleados.findByPk(empleadoId)
         .then(empleado => {
             if (empleado) {
                 res.status(200).json({
@@ -67,7 +67,7 @@ exports.getEmpleadoById = (req, res) => {
         .catch(error => {
             console.log(error);
             res.status(500).json({
-                message: "¡Error!",
+                message: "¡Error al recuperar el empleado!",
                 error: error.message
             });
         });
@@ -77,7 +77,7 @@ exports.getEmpleadoById = (req, res) => {
 exports.updateById = async (req, res) => {
     try {
         let empleadoId = req.params.id;
-        let empleado = await Empleado.findByPk(empleadoId);
+        let empleado = await Empleados.findByPk(empleadoId);
 
         if (!empleado) {
             res.status(404).json({
@@ -90,10 +90,11 @@ exports.updateById = async (req, res) => {
                 apellido: req.body.apellido,
                 correo: req.body.correo,
                 sueldo: req.body.sueldo,
-                estado: req.body.estado
+                rol: req.body.rol,  // Asume que el rol sigue siendo "admin" o "empleado"
+                estado: req.body.estado || empleado.estado
             };
 
-            let result = await Empleado.update(updatedObject, { returning: true, where: { id_emp: empleadoId } });
+            let result = await Empleados.update(updatedObject, { returning: true, where: { id_emp: empleadoId } });
 
             if (!result) {
                 res.status(500).json({
@@ -119,7 +120,7 @@ exports.updateById = async (req, res) => {
 exports.deactivateById = async (req, res) => {
     try {
         let empleadoId = req.params.id;
-        let empleado = await Empleado.findByPk(empleadoId);
+        let empleado = await Empleados.findByPk(empleadoId);
 
         if (!empleado) {
             res.status(404).json({

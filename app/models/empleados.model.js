@@ -1,4 +1,3 @@
-
 module.exports = (sequelize, Sequelize) => {
 	const Empleados = sequelize.define('empleado', {	
 	  id_emp: {
@@ -6,24 +5,34 @@ module.exports = (sequelize, Sequelize) => {
 			autoIncrement: true,
 			primaryKey: true
     },
-	nombre: {
+	  nombre: {
 		    type: Sequelize.STRING
-	},
-	apellido: {
+	  },
+	  apellido: {
 		    type: Sequelize.STRING
-	},
-	correo: {
+	  },
+	  correo: {
 		    type: Sequelize.STRING
-	},
-	sueldo: {
+	  },
+	  sueldo: {
 		    type: Sequelize.DOUBLE
-	},
-	rol: {
-		type: Sequelize.STRING
-	},
-	estado: {
-		type: Sequelize.STRING
-	}
+	  },
+	  rol: {
+		    type: Sequelize.INTEGER,
+		    set(value) {
+			    if (value.toLowerCase() === 'admin') {
+				    this.setDataValue('rol', 1);
+			    } else if (value.toLowerCase() === 'empleado') {
+				    this.setDataValue('rol', 0);
+			    } else {
+				    throw new Error('Rol inválido, debe ser "admin" o "empleado"');
+			    }
+		    }
+	  },
+	  estado: {
+		    type: Sequelize.STRING,
+		    defaultValue: 'Activo' // Por si quieres que el estado sea 'Activo' por defecto
+	  }
 	});
 	
 	return Empleados;
